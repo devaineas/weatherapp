@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -238,6 +239,32 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 24, 0, 0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Weather data provided by: ",
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontWeight: FontWeight.w300,
+                            fontFamily: "SF Pro Text",
+                            fontSize: 14,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _launchUrl(
+                                'https://www.accuweather.com/', 'browser');
+                          },
+                          child: SizedBox(
+                            height: 14,
+                            child: Image.asset('assets/aw-logo.png'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   // Padding(
                   //   padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                   //   child: Container(
@@ -339,10 +366,15 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 32,
                 child: ClipPath(
-                  child: Lottie.asset(
-                    icon,
-                    width: 32,
-                    fit: BoxFit.cover,
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                        const Color(0x99EBEBF5).withOpacity(0.4),
+                        BlendMode.srcIn),
+                    child: Lottie.asset(
+                      icon,
+                      width: 32,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -363,6 +395,17 @@ class _HomeState extends State<Home> {
   }
 }
 
+Future<void> _launchUrl(String url, String m) async {
+  Uri uri = Uri.parse(url);
+  LaunchMode mode = LaunchMode.inAppWebView;
+  if (m == 'browser') {
+    mode = LaunchMode.externalApplication;
+  }
+
+  if (!await launchUrl(uri, mode: mode)) {
+    throw Exception('Could not launch $uri');
+  }
+}
 
 
 
