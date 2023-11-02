@@ -229,16 +229,16 @@ class _HomeState extends State<Home> {
           child: Stack(
             children: <Widget>[
               ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(44.0),
+                  topLeft: Radius.circular(44.0),
+                ),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                   child: Container(
                     decoration: BoxDecoration(
                       color:
                           const Color.fromRGBO(46, 51, 90, 1).withOpacity(0.26),
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(44.0),
-                        topLeft: Radius.circular(44.0),
-                      ),
                     ),
                   ),
                 ),
@@ -329,68 +329,132 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 64, 0, 0),
-                    child: Row(
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                child: ListView(
+                  controller: sc,
+                  children: [
+                    Column(
                       children: [
-                        const SizedBox(width: 10),
-                        weatherCard(20, 30, "overcast-night-rain", "3AM"),
-                        const SizedBox(width: 10),
-                        weatherCard(19, 10, "overcast-night-drizzle", "Now"),
-                        const SizedBox(width: 10),
-                        weatherCard(18, 0, "overcast-day-haze", "5AM"),
-                        const SizedBox(width: 10),
-                        weatherCard(18, 30, "overcast-day-drizzle", "6AM"),
-                        const SizedBox(width: 10),
-                        weatherCard(19, 50, "overcast-day-rain", "7AM"),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 24, 0, 0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Weather data provided by: ",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontWeight: FontWeight.w300,
-                            fontFamily: "SF Pro Text",
-                            fontSize: 14,
+                        Transform.translate(
+                          offset: const Offset(0, -18),
+                          child: //ListView(
+                              //scrollDirection: Axis.horizontal,
+                              //controller: sc,
+                              //children: [
+                              Row(
+                            children: [
+                              const SizedBox(width: 10),
+                              weatherCard(20, 30, "overcast-night-rain", "3AM"),
+                              const SizedBox(width: 10),
+                              weatherCard(
+                                  20, 10, "overcast-night-drizzle", "Now"),
+                              const SizedBox(width: 10),
+                              weatherCard(19, 0, "overcast-day-haze", "5AM"),
+                              const SizedBox(width: 10),
+                              weatherCard(
+                                  18, 30, "overcast-day-drizzle", "6AM"),
+                              const SizedBox(width: 10),
+                              weatherCard(
+                                  19, 50, "overcast-day-drizzle", "7AM"),
+                              const SizedBox(width: 10),
+                              // weatherCard(
+                              //     19, 45, "overcast-day-drizzle", "8AM"),
+                              // const SizedBox(width: 10),
+                              // weatherCard(
+                              //     20, 30, "overcast-day-drizzle", "9AM"),
+                              // const SizedBox(width: 10),
+                              // weatherCard(20, 20, "overcast", "10AM"),
+                              // const SizedBox(width: 10),
+                            ],
+                          ),
+                          //],
+                          // ),
+                        ),
+
+                        // Padding(
+                        //   padding: const EdgeInsets.fromLTRB(12, 24, 0, 0),
+                        //   child: Row(
+                        //     children: [
+                        //       Text(
+                        //         "Weather data provided by: ",
+                        //         style: TextStyle(
+                        //           color: Colors.white.withOpacity(0.8),
+                        //           fontWeight: FontWeight.w300,
+                        //           fontFamily: "SF Pro Text",
+                        //           fontSize: 14,
+                        //         ),
+                        //       ),
+                        //       GestureDetector(
+                        //         onTap: () {
+                        //           _launchUrl(
+                        //               'https://www.accuweather.com/', 'browser');
+                        //         },
+                        //         child: SizedBox(
+                        //           height: 14,
+                        //           child: Image.asset('assets/aw-logo.png'),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+
+                        // Padding(
+                        //   padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                        //   child: Container(
+                        //     width: 320,
+                        //     height: 160,
+                        //     decoration: BoxDecoration(
+                        //       border: Border.all(
+                        //           color: const Color.fromRGBO(72, 49, 157, 0.5)),
+                        //       borderRadius: BorderRadius.circular(30),
+                        //       color: const Color.fromRGBO(31, 29, 71, 0.2),
+                        //     ),
+                        //   ),
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                          child: infoCard(
+                            "assets/icons/lottie/uv-index.json",
+                            "AIR QUALITY",
+                            Container(),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            _launchUrl(
-                                'https://www.accuweather.com/', 'browser');
-                          },
-                          child: SizedBox(
-                            height: 14,
-                            child: Image.asset('assets/aw-logo.png'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                              child: infoCard(
+                                "assets/icons/lottie/uv-index.json",
+                                "UV INDEX",
+                                Container(),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                              child: infoCard(
+                                "assets/icons/lottie/uv-index.json",
+                                "UV INDEX",
+                                Container(),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+                          child: infoCard(
+                            "assets/icons/lottie/uv-index.json",
+                            "UV INDEX",
+                            Container(),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                  //   child: Container(
-                  //     width: 320,
-                  //     height: 160,
-                  //     decoration: BoxDecoration(
-                  //       border: Border.all(
-                  //           color: const Color.fromRGBO(72, 49, 157, 0.5)),
-                  //       borderRadius: BorderRadius.circular(30),
-                  //       color: const Color.fromRGBO(31, 29, 71, 0.2),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+                  ],
+                ),
               ),
-              // infoCard(
-              //     "assets/icons/lottie/uv-index.json", "UV INDEX", Container()),
             ],
           ),
         ),
@@ -516,345 +580,343 @@ Future<void> _launchUrl(String url, String m) async {
   }
 }
 
-
-
 // Container(
-        //   alignment: Alignment.bottomCenter,
-        //   height: 370,
-        //   width: double.infinity,
-        //   child: Stack(
-        //     children: <Widget>[
-        //       ClipRRect(
-        //         child: BackdropFilter(
-        //           filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-        //           child: Container(
-        //             decoration: BoxDecoration(
-        //               color:
-        //                   const Color.fromRGBO(46, 51, 90, 1).withOpacity(0.26),
-        //               borderRadius: const BorderRadius.only(
-        //                 topRight: Radius.circular(44.0),
-        //                 topLeft: Radius.circular(44.0),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       Divider(
-        //         height: 100,
-        //         thickness: 1,
-        //         color: Colors.white.withOpacity(0.2),
-        //       ),
-        //       Divider(
-        //         height: 101,
-        //         thickness: 1,
-        //         color: Colors.black.withOpacity(0.2),
-        //       ),
-        //       Padding(
-        //         padding: const EdgeInsets.fromLTRB(24, 48, 0, 0),
-        //         child: Container(
-        //           width: 115,
-        //           height: 1,
-        //           color: _selectedIndex == 0
-        //               ? Colors.white.withOpacity(0.2)
-        //               : Colors.transparent,
-        //         ),
-        //       ),
-        //       Padding(
-        //         padding: const EdgeInsets.fromLTRB(220, 48, 0, 0),
-        //         child: Container(
-        //           width: 115,
-        //           height: 1,
-        //           color: _selectedIndex == 1
-        //               ? Colors.white.withOpacity(0.2)
-        //               : Colors.transparent,
-        //         ),
-        //       ),
-        //       Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: [
-        //           Padding(
-        //             padding: const EdgeInsets.fromLTRB(24, 10, 0, 0),
-        //             child: TextButton(
-        //               onPressed: () {
-        //                 setState(() {
-        //                   _selectedIndex = 0;
-        //                 });
-        //               },
-        //               child: Text(
-        //                 "Hourly Forecast",
-        //                 style: TextStyle(
-        //                   color: const Color(0x99EBEBF5).withOpacity(0.4),
-        //                   fontWeight: FontWeight.w600,
-        //                   fontFamily: "SF Pro Text",
-        //                   fontSize: 14,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //           Padding(
-        //             padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-        //             child: SizedBox(
-        //               width: 48.0,
-        //               height: 5.0,
-        //               child: ClipRRect(
-        //                 borderRadius: BorderRadius.circular(10.0),
-        //                 child: Container(
-        //                   color: const Color(0xFF000000).withOpacity(0.3),
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //           Padding(
-        //             padding: const EdgeInsets.fromLTRB(0, 10, 24, 0),
-        //             child: TextButton(
-        //               onPressed: () {
-        //                 setState(() {
-        //                   _selectedIndex = 1;
-        //                 });
-        //               },
-        //               child: Text(
-        //                 "Weekly Forecast",
-        //                 style: TextStyle(
-        //                   color: const Color(0x99EBEBF5).withOpacity(0.4),
-        //                   fontWeight: FontWeight.w600,
-        //                   fontFamily: "SF Pro Text",
-        //                   fontSize: 14,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //       Padding(
-        //         padding: const EdgeInsets.fromLTRB(24, 64, 0, 0),
-        //         child: IntrinsicHeight(
-        //           child: Container(
-        //             width: 60,
-        //             decoration: BoxDecoration(
-        //               borderRadius: BorderRadius.circular(30),
-        //               color: const Color.fromRGBO(72, 49, 157, 0.2),
-        //             ),
-        //             child: Column(
-        //               crossAxisAlignment: CrossAxisAlignment.center,
-        //               mainAxisAlignment: MainAxisAlignment.start,
-        //               children: <Widget>[
-        //                 const SizedBox(height: 20),
-        //                 const Text(
-        //                   "12AM",
-        //                   style: TextStyle(
-        //                     color: Colors.white,
-        //                     fontWeight: FontWeight.w600,
-        //                     fontFamily: "SF Pro Text",
-        //                     fontSize: 14,
-        //                   ),
-        //                 ),
-        //                 const SizedBox(height: 20),
-        //                 SizedBox(
-        //                   height: 32,
-        //                   child: ClipPath(
-        //                     child: Lottie.asset(
-        //                       'assets/icons/lottie/partly-cloudy-night-rain.json',
-        //                       width: 32,
-        //                       fit: BoxFit.cover,
-        //                     ),
-        //                   ),
-        //                 ),
-        //                 const Text(
-        //                   "30%",
-        //                   style: TextStyle(
-        //                     color: Color.fromRGBO(64, 203, 216, 1),
-        //                     fontWeight: FontWeight.w600,
-        //                     fontFamily: "SF Pro Text",
-        //                     fontSize: 13,
-        //                   ),
-        //                 ),
-        //                 const SizedBox(height: 20),
-        //                 const Text(
-        //                   "19°C",
-        //                   style: TextStyle(
-        //                     color: Colors.white,
-        //                     fontWeight: FontWeight.normal,
-        //                     fontFamily: "SF Pro Display",
-        //                     fontSize: 18,
-        //                   ),
-        //                 ),
-        //                 const SizedBox(height: 20),
-        //               ],
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        // Positioned(
-        //   left: 10,
-        //   right: 10,
-        //   bottom: 10,
-        //   child: Align(
-        //     alignment: Alignment.bottomCenter,
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //       children: [
-        //         Expanded(
-        //           child: Padding(
-        //             padding: const EdgeInsets.only(right: 8.0),
-        //             child: Column(
-        //               children: [
-        //                 Row(
-        //                   children: [
-        //                     SizedBox(
-        //                       height: 32,
-        //                       width: 32,
-        //                       child: ClipPath(
-        //                         child: Lottie.asset(
-        //                           'assets/icons/lottie/sunrise.json',
-        //                           fit: BoxFit.cover,
-        //                         ),
-        //                       ),
-        //                     ),
-        //                     const SizedBox(width: 8),
-        //                     const Text(
-        //                       "Sunrise: ",
-        //                       style: TextStyle(
-        //                         color: Colors.white,
-        //                         fontWeight: FontWeight.w300,
-        //                         fontFamily: "SF Pro Text",
-        //                         fontSize: 13,
-        //                       ),
-        //                     ),
-        //                     const Text(
-        //                       "5:13 AM",
-        //                       style: TextStyle(
-        //                         color: Colors.white,
-        //                         fontWeight: FontWeight.normal,
-        //                         fontFamily: "SF Pro Text",
-        //                         fontSize: 13,
-        //                       ),
-        //                     ),
-        //                   ],
-        //                 ),
-        //                 const SizedBox(height: 8),
-        //                 Row(
-        //                   children: [
-        //                     SizedBox(
-        //                       height: 32,
-        //                       width: 32,
-        //                       child: ClipPath(
-        //                         child: Lottie.asset(
-        //                           'assets/icons/lottie/sunset.json',
-        //                           fit: BoxFit.cover,
-        //                         ),
-        //                       ),
-        //                     ),
-        //                     const SizedBox(width: 8),
-        //                     const Text(
-        //                       "Sunset: ",
-        //                       style: TextStyle(
-        //                         color: Colors.white,
-        //                         fontWeight: FontWeight.w300,
-        //                         fontFamily: "SF Pro Text",
-        //                         fontSize: 13,
-        //                       ),
-        //                     ),
-        //                     const Text(
-        //                       "8:12 PM",
-        //                       style: TextStyle(
-        //                         color: Colors.white,
-        //                         fontWeight: FontWeight.normal,
-        //                         fontFamily: "SF Pro Text",
-        //                         fontSize: 13,
-        //                       ),
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //         ),
-        //         Expanded(
-        //           child: Align(
-        //             alignment: Alignment.centerRight,
-        //             child: Padding(
-        //               padding: const EdgeInsets.only(left: 8.0),
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.end,
-        //                 children: [
-        //                   Row(
-        //                     mainAxisAlignment: MainAxisAlignment.end,
-        //                     children: [
-        //                       SizedBox(
-        //                         height: 32,
-        //                         width: 32,
-        //                         child: ClipPath(
-        //                           child: Lottie.asset(
-        //                             'assets/icons/lottie/moonrise.json',
-        //                             fit: BoxFit.cover,
-        //                           ),
-        //                         ),
-        //                       ),
-        //                       const SizedBox(width: 8),
-        //                       const Text(
-        //                         "Moonrise: ",
-        //                         style: TextStyle(
-        //                           color: Colors.white,
-        //                           fontWeight: FontWeight.w300,
-        //                           fontFamily: "SF Pro Text",
-        //                           fontSize: 13,
-        //                         ),
-        //                       ),
-        //                       const Text(
-        //                         "2:56 PM",
-        //                         style: TextStyle(
-        //                           color: Colors.white,
-        //                           fontWeight: FontWeight.normal,
-        //                           fontFamily: "SF Pro Text",
-        //                           fontSize: 13,
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   const SizedBox(height: 8),
-        //                   Row(
-        //                     mainAxisAlignment: MainAxisAlignment.end,
-        //                     children: [
-        //                       SizedBox(
-        //                         height: 32,
-        //                         width: 32,
-        //                         child: ClipPath(
-        //                           child: Lottie.asset(
-        //                             'assets/icons/lottie/moonset.json',
-        //                             fit: BoxFit.cover,
-        //                           ),
-        //                         ),
-        //                       ),
-        //                       const SizedBox(width: 8),
-        //                       const Text(
-        //                         "Moonset: ",
-        //                         style: TextStyle(
-        //                           color: Colors.white,
-        //                           fontWeight: FontWeight.w300,
-        //                           fontFamily: "SF Pro Text",
-        //                           fontSize: 13,
-        //                         ),
-        //                       ),
-        //                       const Text(
-        //                         "1:18 AM",
-        //                         style: TextStyle(
-        //                           color: Colors.white,
-        //                           fontWeight: FontWeight.normal,
-        //                           fontFamily: "SF Pro Text",
-        //                           fontSize: 13,
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        //     ],
-        //   ),
-        // ),
+//   alignment: Alignment.bottomCenter,
+//   height: 370,
+//   width: double.infinity,
+//   child: Stack(
+//     children: <Widget>[
+//       ClipRRect(
+//         child: BackdropFilter(
+//           filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               color:
+//                   const Color.fromRGBO(46, 51, 90, 1).withOpacity(0.26),
+//               borderRadius: const BorderRadius.only(
+//                 topRight: Radius.circular(44.0),
+//                 topLeft: Radius.circular(44.0),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//       Divider(
+//         height: 100,
+//         thickness: 1,
+//         color: Colors.white.withOpacity(0.2),
+//       ),
+//       Divider(
+//         height: 101,
+//         thickness: 1,
+//         color: Colors.black.withOpacity(0.2),
+//       ),
+//       Padding(
+//         padding: const EdgeInsets.fromLTRB(24, 48, 0, 0),
+//         child: Container(
+//           width: 115,
+//           height: 1,
+//           color: _selectedIndex == 0
+//               ? Colors.white.withOpacity(0.2)
+//               : Colors.transparent,
+//         ),
+//       ),
+//       Padding(
+//         padding: const EdgeInsets.fromLTRB(220, 48, 0, 0),
+//         child: Container(
+//           width: 115,
+//           height: 1,
+//           color: _selectedIndex == 1
+//               ? Colors.white.withOpacity(0.2)
+//               : Colors.transparent,
+//         ),
+//       ),
+//       Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.fromLTRB(24, 10, 0, 0),
+//             child: TextButton(
+//               onPressed: () {
+//                 setState(() {
+//                   _selectedIndex = 0;
+//                 });
+//               },
+//               child: Text(
+//                 "Hourly Forecast",
+//                 style: TextStyle(
+//                   color: const Color(0x99EBEBF5).withOpacity(0.4),
+//                   fontWeight: FontWeight.w600,
+//                   fontFamily: "SF Pro Text",
+//                   fontSize: 14,
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+//             child: SizedBox(
+//               width: 48.0,
+//               height: 5.0,
+//               child: ClipRRect(
+//                 borderRadius: BorderRadius.circular(10.0),
+//                 child: Container(
+//                   color: const Color(0xFF000000).withOpacity(0.3),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.fromLTRB(0, 10, 24, 0),
+//             child: TextButton(
+//               onPressed: () {
+//                 setState(() {
+//                   _selectedIndex = 1;
+//                 });
+//               },
+//               child: Text(
+//                 "Weekly Forecast",
+//                 style: TextStyle(
+//                   color: const Color(0x99EBEBF5).withOpacity(0.4),
+//                   fontWeight: FontWeight.w600,
+//                   fontFamily: "SF Pro Text",
+//                   fontSize: 14,
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//       Padding(
+//         padding: const EdgeInsets.fromLTRB(24, 64, 0, 0),
+//         child: IntrinsicHeight(
+//           child: Container(
+//             width: 60,
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(30),
+//               color: const Color.fromRGBO(72, 49, 157, 0.2),
+//             ),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               children: <Widget>[
+//                 const SizedBox(height: 20),
+//                 const Text(
+//                   "12AM",
+//                   style: TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.w600,
+//                     fontFamily: "SF Pro Text",
+//                     fontSize: 14,
+//                   ),
+//                 ),
+//                 const SizedBox(height: 20),
+//                 SizedBox(
+//                   height: 32,
+//                   child: ClipPath(
+//                     child: Lottie.asset(
+//                       'assets/icons/lottie/partly-cloudy-night-rain.json',
+//                       width: 32,
+//                       fit: BoxFit.cover,
+//                     ),
+//                   ),
+//                 ),
+//                 const Text(
+//                   "30%",
+//                   style: TextStyle(
+//                     color: Color.fromRGBO(64, 203, 216, 1),
+//                     fontWeight: FontWeight.w600,
+//                     fontFamily: "SF Pro Text",
+//                     fontSize: 13,
+//                   ),
+//                 ),
+//                 const SizedBox(height: 20),
+//                 const Text(
+//                   "19°C",
+//                   style: TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.normal,
+//                     fontFamily: "SF Pro Display",
+//                     fontSize: 18,
+//                   ),
+//                 ),
+//                 const SizedBox(height: 20),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+// Positioned(
+//   left: 10,
+//   right: 10,
+//   bottom: 10,
+//   child: Align(
+//     alignment: Alignment.bottomCenter,
+//     child: Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         Expanded(
+//           child: Padding(
+//             padding: const EdgeInsets.only(right: 8.0),
+//             child: Column(
+//               children: [
+//                 Row(
+//                   children: [
+//                     SizedBox(
+//                       height: 32,
+//                       width: 32,
+//                       child: ClipPath(
+//                         child: Lottie.asset(
+//                           'assets/icons/lottie/sunrise.json',
+//                           fit: BoxFit.cover,
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(width: 8),
+//                     const Text(
+//                       "Sunrise: ",
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.w300,
+//                         fontFamily: "SF Pro Text",
+//                         fontSize: 13,
+//                       ),
+//                     ),
+//                     const Text(
+//                       "5:13 AM",
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.normal,
+//                         fontFamily: "SF Pro Text",
+//                         fontSize: 13,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 const SizedBox(height: 8),
+//                 Row(
+//                   children: [
+//                     SizedBox(
+//                       height: 32,
+//                       width: 32,
+//                       child: ClipPath(
+//                         child: Lottie.asset(
+//                           'assets/icons/lottie/sunset.json',
+//                           fit: BoxFit.cover,
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(width: 8),
+//                     const Text(
+//                       "Sunset: ",
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.w300,
+//                         fontFamily: "SF Pro Text",
+//                         fontSize: 13,
+//                       ),
+//                     ),
+//                     const Text(
+//                       "8:12 PM",
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.normal,
+//                         fontFamily: "SF Pro Text",
+//                         fontSize: 13,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//         Expanded(
+//           child: Align(
+//             alignment: Alignment.centerRight,
+//             child: Padding(
+//               padding: const EdgeInsets.only(left: 8.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.end,
+//                 children: [
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.end,
+//                     children: [
+//                       SizedBox(
+//                         height: 32,
+//                         width: 32,
+//                         child: ClipPath(
+//                           child: Lottie.asset(
+//                             'assets/icons/lottie/moonrise.json',
+//                             fit: BoxFit.cover,
+//                           ),
+//                         ),
+//                       ),
+//                       const SizedBox(width: 8),
+//                       const Text(
+//                         "Moonrise: ",
+//                         style: TextStyle(
+//                           color: Colors.white,
+//                           fontWeight: FontWeight.w300,
+//                           fontFamily: "SF Pro Text",
+//                           fontSize: 13,
+//                         ),
+//                       ),
+//                       const Text(
+//                         "2:56 PM",
+//                         style: TextStyle(
+//                           color: Colors.white,
+//                           fontWeight: FontWeight.normal,
+//                           fontFamily: "SF Pro Text",
+//                           fontSize: 13,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   const SizedBox(height: 8),
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.end,
+//                     children: [
+//                       SizedBox(
+//                         height: 32,
+//                         width: 32,
+//                         child: ClipPath(
+//                           child: Lottie.asset(
+//                             'assets/icons/lottie/moonset.json',
+//                             fit: BoxFit.cover,
+//                           ),
+//                         ),
+//                       ),
+//                       const SizedBox(width: 8),
+//                       const Text(
+//                         "Moonset: ",
+//                         style: TextStyle(
+//                           color: Colors.white,
+//                           fontWeight: FontWeight.w300,
+//                           fontFamily: "SF Pro Text",
+//                           fontSize: 13,
+//                         ),
+//                       ),
+//                       const Text(
+//                         "1:18 AM",
+//                         style: TextStyle(
+//                           color: Colors.white,
+//                           fontWeight: FontWeight.normal,
+//                           fontFamily: "SF Pro Text",
+//                           fontSize: 13,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     ),
+//   ),
+// ),
+//     ],
+//   ),
+// ),
