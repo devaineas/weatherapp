@@ -580,7 +580,8 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/wind.json",
                                     "WIND",
-                                    Container(),
+                                    const WindWidget(
+                                        windSpeed: 9.2, direction: 90),
                                   ),
                                 ),
                               ),
@@ -777,7 +778,7 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/barometer.json",
                                     "PRESSURE",
-                                    Container(),
+                                    Container(), //CircleWithLines(linesCount: 80),
                                   ),
                                 ),
                               ),
@@ -964,6 +965,183 @@ class LineChartPainter extends CustomPainter {
   }
 }
 
+class WindWidget extends StatelessWidget {
+  final double windSpeed;
+  final int direction;
+
+  const WindWidget(
+      {super.key, required this.windSpeed, required this.direction});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 125,
+        height: 125,
+        child: CustomPaint(
+          painter: WindWidgetPainter(windSpeed, direction),
+          child: const Center(),
+        ),
+      ),
+    );
+  }
+}
+
+class WindWidgetPainter extends CustomPainter {
+  final double windSpeed;
+  final int direction;
+
+  WindWidgetPainter(this.windSpeed, this.direction);
+
+  final int linesCount = 180;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double centerX = size.width / 2;
+    final double centerY = size.height / 2;
+    final double radius = size.width / 2 - 10;
+
+    // Calculate the angle between each line based on the total number of lines
+    final double angleBetweenLines = 360 / linesCount;
+
+    for (int i = 0; i < linesCount; i++) {
+      final double radians = i * angleBetweenLines * pi / 180;
+
+      final double startX = centerX + radius * cos(radians);
+      final double startY = centerY + radius * sin(radians);
+
+      final double endX = centerX +
+          (radius + 6.0) * cos(radians); // Adjust the length of the lines
+      final double endY = centerY + (radius + 6.0) * sin(radians);
+
+      // Calculate the opacity based on line index
+      double opacity;
+      if (i % 45 == 0) {
+        opacity = 1.0; // 100% opacity for every 45 lines
+      } else if (i % 45 == 15 || i % 45 == 30) {
+        opacity = 0.75; // 75% opacity for every 15 lines
+      } else {
+        opacity = 0.25; // 25% opacity for other lines
+      }
+
+      final Paint linePaint = Paint()
+        ..color = Colors.white.withOpacity(opacity)
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 0.5;
+
+      // Draw lines
+      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), linePaint);
+
+      if (i == 0) {
+        // Draw the arrow's body using the fully opaque top line
+        final Paint arrowBodyPaint = Paint()
+          ..color = Colors.white
+          ..strokeCap = StrokeCap.round
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 0.5;
+
+        final double arrowBodyStartX = centerX;
+        final double arrowBodyStartY = centerY - radius;
+        final double arrowBodyEndX = centerX;
+        final double arrowBodyEndY = centerY - radius - 10;
+
+        canvas.drawLine(Offset(arrowBodyStartX, arrowBodyStartY),
+            Offset(arrowBodyEndX, arrowBodyEndY), arrowBodyPaint);
+
+        // Draw the arrow's head
+        const double arrowHeadSize = 4.0;
+        final Paint arrowHeadPaint = Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.fill;
+
+        final Path arrowHeadPath = Path()
+          ..moveTo(centerX - arrowHeadSize, centerY - radius - 5)
+          ..lineTo(centerX + arrowHeadSize, centerY - radius - 5)
+          ..lineTo(centerX, arrowBodyEndY)
+          ..close();
+
+        canvas.drawPath(arrowHeadPath, arrowHeadPaint);
+      }
+
+      const String unit = "km/h";
+
+      final TextPainter topTextPainter = TextPainter(
+        text: TextSpan(
+          text: windSpeed.toString(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      final TextPainter bottomTextPainter = TextPainter(
+        text: const TextSpan(
+          text: unit,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      topTextPainter.layout();
+      bottomTextPainter.layout();
+
+      final double topTextX = centerX - topTextPainter.width / 2;
+      final double topTextY =
+          centerY - 7 - topTextPainter.height / 2; //Vertical spacing
+      final double bottomTextX = centerX - bottomTextPainter.width / 2;
+      final double bottomTextY = centerY + 8 - bottomTextPainter.height / 2;
+
+      topTextPainter.paint(canvas, Offset(topTextX, topTextY));
+      bottomTextPainter.paint(canvas, Offset(bottomTextX, bottomTextY));
+
+      if (i == 135) {
+        drawLabel(canvas, centerX, centerY - radius + 10, "N", Colors.red);
+      }
+
+      if (i == 0) {
+        drawLabel(canvas, centerX + radius - 10, centerY, "E", Colors.white);
+      } else if (i == 45) {
+        drawLabel(canvas, centerX, centerY + radius - 10, "S", Colors.white);
+      } else if (i == 90) {
+        drawLabel(canvas, centerX - radius + 10, centerY, "W", Colors.white);
+      }
+    }
+  }
+
+  void drawLabel(Canvas canvas, double x, double y, String text, Color color) {
+    final TextPainter painter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          color: color,
+          fontSize: 12.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+
+    painter.layout();
+
+    final double textX = x - painter.width / 2;
+    final double textY = y - painter.height / 2;
+
+    painter.paint(canvas, Offset(textX, textY));
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
 
 // Container(
 //   alignment: Alignment.bottomCenter,
