@@ -591,7 +591,40 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/raindrop.json",
                                     "RAINFALL",
-                                    Container(),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(15, 5, 10, 0),
+                                          child: Text(
+                                            '1.8 mm in the last hour',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              15, 20, 10, 0),
+                                          child: Text(
+                                            '1.2 mm expected in the next 24h.',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -607,7 +640,40 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/thermometer.json",
                                     "FEELS LIKE",
-                                    Container(),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(15, 5, 10, 0),
+                                          child: Text(
+                                            '19°C',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              15, 45, 10, 0),
+                                          child: Text(
+                                            'Similar to the actual temperature.',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -618,7 +684,40 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/humidity.json",
                                     "HUMIDITY",
-                                    Container(),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(15, 5, 10, 0),
+                                          child: Text(
+                                            '90%',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              15, 45, 10, 0),
+                                          child: Text(
+                                            'The dew point is 17°C right now.',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -634,7 +733,40 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/compass.json",
                                     "VISIBILITY",
-                                    Container(),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(15, 5, 10, 0),
+                                          child: Text(
+                                            '8 km',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              15, 45, 10, 0),
+                                          child: Text(
+                                            'Reduced visibility due to the rain.',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
