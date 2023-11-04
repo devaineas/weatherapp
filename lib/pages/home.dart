@@ -1,6 +1,8 @@
 import 'dart:ui';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,6 +13,17 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
+
+final Widget chevron = Transform.rotate(
+  angle: pi / 180 * -90, //convert to radians
+  child: SvgPicture.asset(
+    "assets/chevron-down.svg",
+    semanticsLabel: 'Chevron Right',
+    color: Colors.white.withOpacity(0.25),
+    width: 20,
+    height: 20,
+  ),
+);
 
 final PanelController _panelController = PanelController();
 
@@ -334,123 +347,312 @@ class _HomeState extends State<Home> {
                 child: ListView(
                   controller: sc,
                   children: [
-                    Column(
-                      children: [
-                        Transform.translate(
-                          offset: const Offset(0, -18),
-                          child: //ListView(
-                              //scrollDirection: Axis.horizontal,
+                    Transform.translate(
+                      offset: const Offset(0, -18),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 166,
+                            width: double.infinity,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
                               //controller: sc,
-                              //children: [
-                              Row(
+                              shrinkWrap: true,
+                              children: [
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 10),
+                                    weatherCard(
+                                        20, 30, "overcast-night-rain", "3AM"),
+                                    const SizedBox(width: 10),
+                                    weatherCard(20, 10,
+                                        "overcast-night-drizzle", "Now"),
+                                    const SizedBox(width: 10),
+                                    weatherCard(
+                                        19, 0, "overcast-day-haze", "5AM"),
+                                    const SizedBox(width: 10),
+                                    weatherCard(
+                                        18, 30, "overcast-day-drizzle", "6AM"),
+                                    const SizedBox(width: 10),
+                                    weatherCard(
+                                        19, 50, "overcast-day-drizzle", "7AM"),
+                                    const SizedBox(width: 10),
+                                    weatherCard(
+                                        19, 45, "overcast-day-drizzle", "8AM"),
+                                    const SizedBox(width: 10),
+                                    weatherCard(
+                                        20, 30, "overcast-day-drizzle", "9AM"),
+                                    const SizedBox(width: 10),
+                                    weatherCard(20, 20, "overcast", "10AM"),
+                                    const SizedBox(width: 10),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(12, 24, 0, 0),
+                          //   child: Row(
+                          //     children: [
+                          //       Text(
+                          //         "Weather data provided by: ",
+                          //         style: TextStyle(
+                          //           color: Colors.white.withOpacity(0.8),
+                          //           fontWeight: FontWeight.w300,
+                          //           fontFamily: "SF Pro Text",
+                          //           fontSize: 14,
+                          //         ),
+                          //       ),
+                          //       GestureDetector(
+                          //         onTap: () {
+                          //           _launchUrl(
+                          //               'https://www.accuweather.com/', 'browser');
+                          //         },
+                          //         child: SizedBox(
+                          //           height: 14,
+                          //           child: Image.asset('assets/aw-logo.png'),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+
+                          // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                          //   child: Container(
+                          //     width: 320,
+                          //     height: 160,
+                          //     decoration: BoxDecoration(
+                          //       border: Border.all(
+                          //           color: const Color.fromRGBO(72, 49, 157, 0.5)),
+                          //       borderRadius: BorderRadius.circular(30),
+                          //       color: const Color.fromRGBO(31, 29, 71, 0.2),
+                          //     ),
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                            child: infoCard(
+                              "assets/icons/lottie/smoke.json",
+                              "AIR QUALITY",
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                                    child: Text(
+                                      "3 - Low Health Risk",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "SF Pro Display",
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        25, 25, 25, 0),
+                                    child: CustomPaint(
+                                      size: const Size(275, 1),
+                                      painter: LineChartPainter(
+                                          dotPosition: 1 / 11 * 3),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Divider(
+                                    indent: 20,
+                                    endIndent: 20,
+                                    thickness: 1,
+                                    color: Colors.white.withOpacity(0.075),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _launchUrl('https://www.accuweather.com/',
+                                          'browser');
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 3, 20, 0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "See more",
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white.withOpacity(0.8),
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SF Pro Text",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          chevron
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
-                              const SizedBox(width: 10),
-                              weatherCard(20, 30, "overcast-night-rain", "3AM"),
-                              const SizedBox(width: 10),
-                              weatherCard(
-                                  20, 10, "overcast-night-drizzle", "Now"),
-                              const SizedBox(width: 10),
-                              weatherCard(19, 0, "overcast-day-haze", "5AM"),
-                              const SizedBox(width: 10),
-                              weatherCard(
-                                  18, 30, "overcast-day-drizzle", "6AM"),
-                              const SizedBox(width: 10),
-                              weatherCard(
-                                  19, 50, "overcast-day-drizzle", "7AM"),
-                              const SizedBox(width: 10),
-                              // weatherCard(
-                              //     19, 45, "overcast-day-drizzle", "8AM"),
-                              // const SizedBox(width: 10),
-                              // weatherCard(
-                              //     20, 30, "overcast-day-drizzle", "9AM"),
-                              // const SizedBox(width: 10),
-                              // weatherCard(20, 20, "overcast", "10AM"),
-                              // const SizedBox(width: 10),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 10, 5, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/uv-index.json",
+                                    "UV INDEX",
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(20, 15, 0, 0),
+                                          child: Text(
+                                            '4',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                          child: Text(
+                                            'Moderate',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20, 25, 20, 0),
+                                          child: CustomPaint(
+                                            size: const Size(275, 1),
+                                            painter: LineChartPainter(
+                                                dotPosition: 1 / 11 * 4),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 10, 15, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/sunrise.json",
+                                    "SUNRISE",
+                                    Container(),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                          //],
-                          // ),
-                        ),
 
-                        // Padding(
-                        //   padding: const EdgeInsets.fromLTRB(12, 24, 0, 0),
-                        //   child: Row(
-                        //     children: [
-                        //       Text(
-                        //         "Weather data provided by: ",
-                        //         style: TextStyle(
-                        //           color: Colors.white.withOpacity(0.8),
-                        //           fontWeight: FontWeight.w300,
-                        //           fontFamily: "SF Pro Text",
-                        //           fontSize: 14,
-                        //         ),
-                        //       ),
-                        //       GestureDetector(
-                        //         onTap: () {
-                        //           _launchUrl(
-                        //               'https://www.accuweather.com/', 'browser');
-                        //         },
-                        //         child: SizedBox(
-                        //           height: 14,
-                        //           child: Image.asset('assets/aw-logo.png'),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-
-                        // Padding(
-                        //   padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                        //   child: Container(
-                        //     width: 320,
-                        //     height: 160,
-                        //     decoration: BoxDecoration(
-                        //       border: Border.all(
-                        //           color: const Color.fromRGBO(72, 49, 157, 0.5)),
-                        //       borderRadius: BorderRadius.circular(30),
-                        //       color: const Color.fromRGBO(31, 29, 71, 0.2),
-                        //     ),
-                        //   ),
-                        // ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          child: infoCard(
-                            "assets/icons/lottie/uv-index.json",
-                            "AIR QUALITY",
-                            Container(),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                              child: infoCard(
-                                "assets/icons/lottie/uv-index.json",
-                                "UV INDEX",
-                                Container(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 10, 5, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/wind.json",
+                                    "WIND",
+                                    Container(),
+                                  ),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                              child: infoCard(
-                                "assets/icons/lottie/uv-index.json",
-                                "UV INDEX",
-                                Container(),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 10, 15, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/raindrop.json",
+                                    "RAINFALL",
+                                    Container(),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
-                          child: infoCard(
-                            "assets/icons/lottie/uv-index.json",
-                            "UV INDEX",
-                            Container(),
+                            ],
                           ),
-                        ),
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 10, 5, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/thermometer.json",
+                                    "FEELS LIKE",
+                                    Container(),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 10, 15, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/humidity.json",
+                                    "HUMIDITY",
+                                    Container(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 10, 5, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/compass.json",
+                                    "VISIBILITY",
+                                    Container(),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 10, 15, 0),
+                                  child: infoCard(
+                                    "assets/icons/lottie/barometer.json",
+                                    "PRESSURE",
+                                    Container(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -525,46 +727,52 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget infoCard(String icon, String text, Container content) {
-    return (Container(
+  Widget infoCard(String icon, String text, Widget content) {
+    return Container(
       height: 168,
       decoration: BoxDecoration(
         border: Border.all(color: const Color.fromRGBO(64, 203, 216, 0.15)),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              SizedBox(
-                height: 32,
-                child: ClipPath(
-                  child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                        const Color(0x99EBEBF5).withOpacity(0.4),
-                        BlendMode.srcIn),
-                    child: Lottie.asset(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 32,
+                  child: ClipPath(
+                    child:
+                        // ColorFiltered(
+                        //   colorFilter: ColorFilter.mode(
+                        //       const Color(0x99EBEBF5).withOpacity(0.4),
+                        //       BlendMode.srcIn),
+                        Lottie.asset(
                       icon,
                       width: 32,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 3),
-              Text(
-                text,
-                style: TextStyle(
-                    color: const Color(0x99EBEBF5).withOpacity(0.4),
-                    fontWeight: FontWeight.normal,
-                    fontFamily: "SF Pro Display",
-                    fontSize: 16),
-              )
-            ],
+
+                //const SizedBox(width: 1.5),
+                Text(
+                  text,
+                  style: TextStyle(
+                      color: const Color(0x99EBEBF5).withOpacity(0.4),
+                      fontWeight: FontWeight.normal,
+                      fontFamily: "SF Pro Display",
+                      fontSize: 16),
+                ),
+              ],
+            ),
           ),
+          content,
         ],
       ),
-    ));
+    );
   }
 }
 
@@ -579,6 +787,51 @@ Future<void> _launchUrl(String url, String m) async {
     throw Exception('Could not launch $uri');
   }
 }
+
+class LineChartPainter extends CustomPainter {
+  final double dotPosition;
+
+  LineChartPainter({required this.dotPosition});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = Colors.blue
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.0;
+
+    final Path path = Path()
+      ..moveTo(0, size.height / 2)
+      ..lineTo(size.width, size.height / 2);
+
+    // Create a linear gradient for the line
+    final Shader linearGradient = const LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [Color.fromRGBO(54, 88, 177, 1), Color.fromRGBO(231, 67, 149, 1)],
+    ).createShader(Rect.fromPoints(
+        Offset(0, size.height / 2), Offset(size.width, size.height / 2)));
+
+    paint.shader = linearGradient;
+
+    canvas.drawPath(path, paint);
+
+    final double dotX = dotPosition * size.width;
+    final double dotY = size.height / 2;
+    const double dotRadius = 4.0;
+    final Paint dotPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(Offset(dotX, dotY), dotRadius, dotPaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
 
 // Container(
 //   alignment: Alignment.bottomCenter,
