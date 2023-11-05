@@ -778,7 +778,7 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/barometer.json",
                                     "PRESSURE",
-                                    Container(), //CircleWithLines(linesCount: 80),
+                                    const BarometerWidget(airPressure: 1006),
                                   ),
                                 ),
                               ),
@@ -1114,6 +1114,176 @@ class WindWidgetPainter extends CustomPainter {
         drawLabel(canvas, centerX - radius + 10, centerY, "W", Colors.white);
       }
     }
+  }
+
+  void drawLabel(Canvas canvas, double x, double y, String text, Color color) {
+    final TextPainter painter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          color: color,
+          fontSize: 12.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+
+    painter.layout();
+
+    final double textX = x - painter.width / 2;
+    final double textY = y - painter.height / 2;
+
+    painter.paint(canvas, Offset(textX, textY));
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class BarometerWidget extends StatelessWidget {
+  final int airPressure;
+
+  const BarometerWidget({super.key, required this.airPressure});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 125,
+        height: 125,
+        child: CustomPaint(
+          painter: BarometerWidgetPainter(airPressure),
+          child: const Center(),
+        ),
+      ),
+    );
+  }
+}
+
+class BarometerWidgetPainter extends CustomPainter {
+  final int airPressure;
+  final int maxAirPressure = 1100;
+  final int minAirPressure = 800;
+  final int visibleLinesCount = 43; //42
+
+  BarometerWidgetPainter(this.airPressure);
+
+  final int linesCount = 69;
+
+  // Calculate the angle for the cursor based on airPressure
+  double calculateCursorAngle() {
+    final clampedAirPressure =
+        airPressure.clamp(minAirPressure, maxAirPressure);
+
+    final cursorAngle =
+        239.5 + (clampedAirPressure - minAirPressure) * (241.8 / 300);
+    return cursorAngle;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double centerX = size.width / 2;
+    final double centerY = size.height / 2;
+    final double radius = size.width / 2 - 10;
+
+    // Calculate the angle between each line based on the total number of lines
+    final double angleBetweenLines = 360 / linesCount;
+
+    for (int i = 0; i < linesCount; i++) {
+      final double radians = i * angleBetweenLines * pi / 163.25;
+
+      final double startX = centerX + radius * cos(radians);
+      final double startY = centerY + radius * sin(radians);
+
+      final double endX = centerX +
+          (radius + 6.0) * cos(radians); // Adjust the length of the lines
+      final double endY = centerY + (radius + 6.0) * sin(radians);
+
+      // Calculate the opacity based on line index
+      double opacity;
+      if (i < 26) {
+        opacity = 0.0;
+      } else if (i == 26 || i == 40 || i == 54 || i == 68) {
+        opacity = 1.00;
+      } else {
+        opacity = 0.25;
+      }
+
+      final Paint linePaint = Paint()
+        ..color = Colors.white.withOpacity(opacity)
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1;
+
+      // Draw lines
+      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), linePaint);
+
+      const String unit = "hPa";
+
+      final TextPainter topTextPainter = TextPainter(
+        text: TextSpan(
+          text: airPressure.toString(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      final TextPainter bottomTextPainter = TextPainter(
+        text: const TextSpan(
+          text: unit,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      topTextPainter.layout();
+      bottomTextPainter.layout();
+
+      final double topTextX = centerX - topTextPainter.width / 2;
+      final double topTextY =
+          centerY - 7 - topTextPainter.height / 2; //Vertical spacing
+      final double bottomTextX = centerX - bottomTextPainter.width / 2;
+      final double bottomTextY = centerY + 8 - bottomTextPainter.height / 2;
+
+      topTextPainter.paint(canvas, Offset(topTextX, topTextY));
+      bottomTextPainter.paint(canvas, Offset(bottomTextX, bottomTextY));
+    }
+
+    // Calculate the angle for the cursor
+    final cursorAngle = calculateCursorAngle();
+
+    // Calculate the cursor's position at the lines
+    final double cursorStartX =
+        centerX + (radius + 6) * cos((cursorAngle - 90) * pi / 180);
+    final double cursorStartY =
+        centerY + (radius + 6) * sin((cursorAngle - 90) * pi / 180);
+
+    // Calculate the endpoint of the cursor line
+    final double cursorEndX =
+        centerX + (radius - 6) * cos((cursorAngle - 90) * pi / 180);
+    final double cursorEndY =
+        centerY + (radius - 6) * sin((cursorAngle - 90) * pi / 180);
+
+    // Draw the cursor line
+    final Paint cursorPaint = Paint()
+      ..color = Colors.red
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+
+    canvas.drawLine(Offset(cursorStartX, cursorStartY),
+        Offset(cursorEndX, cursorEndY), cursorPaint);
   }
 
   void drawLabel(Canvas canvas, double x, double y, String text, Color color) {
