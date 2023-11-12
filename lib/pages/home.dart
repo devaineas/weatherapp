@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -563,7 +564,41 @@ class _HomeState extends State<Home> {
                                   child: infoCard(
                                     "assets/icons/lottie/sunrise.json",
                                     "SUNRISE",
-                                    Container(),
+                                    const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(15, 0, 10, 0),
+                                          child: Text(
+                                            '5:28 AM',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 28,
+                                            ),
+                                          ),
+                                        ),
+                                        SunriseChart(position: 0.28),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(15, 5, 10, 0),
+                                          child: Text(
+                                            'Sunset: 7:25PM',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SF Pro Display",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -1312,6 +1347,131 @@ class BarometerWidgetPainter extends CustomPainter {
     return false;
   }
 }
+
+class SunriseChart extends StatelessWidget {
+  final double position;
+
+  const SunriseChart({super.key, required this.position});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: double.infinity,
+        height: 70,
+        child: CustomPaint(
+          painter: SunriseSunsetPainter(dotPosition: position),
+        ),
+      ),
+    );
+  }
+}
+
+class SunriseSunsetPainter extends CustomPainter {
+  final double dotPosition; // between 0 and 1
+
+  SunriseSunsetPainter({required this.dotPosition});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint invisibleLinePaint = Paint()
+      ..color = Colors.lightBlueAccent.withOpacity(0.05)
+      ..strokeWidth = 3.0
+      ..style = PaintingStyle.stroke;
+
+    Paint visibleLinePaint = Paint()
+      ..color = Colors.lightBlueAccent.withOpacity(0.45)
+      ..strokeWidth = 3.0
+      ..style = PaintingStyle.stroke;
+
+    Paint dotPaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 6.0
+      ..style = PaintingStyle.fill;
+
+    final Paint divider = Paint()
+      ..color = Colors.white.withOpacity(0.3)
+      ..strokeWidth = 1.5;
+
+    Path invisibleLinePath1 = Path();
+    Path invisibleLinePath2 = Path();
+    Path visibleLinePath = Path();
+
+    // First segment
+    invisibleLinePath1.moveTo(0, size.height);
+    invisibleLinePath1.quadraticBezierTo(
+        15, size.height - 5, size.width / 6 - 0.75, size.height - 25);
+
+    // First curve
+    visibleLinePath.moveTo(25, size.height - 25); // Starting point
+    visibleLinePath.quadraticBezierTo(
+        size.width / 2, 0, size.width - 25, size.height - 25);
+
+    // Second segment
+    invisibleLinePath2.moveTo(size.width, size.height);
+    invisibleLinePath2.quadraticBezierTo(size.width - 15, size.height - 5,
+        5 * size.width / 6 + 0.75, size.height - 25);
+
+    // Draw the invisible lines
+    canvas.drawPath(invisibleLinePath1, invisibleLinePaint);
+    canvas.drawPath(invisibleLinePath2, invisibleLinePaint);
+
+    // Draw the divider line
+    final double dividerY = size.height - 25; //inverted Y axis
+    canvas.drawLine(Offset(0, dividerY), Offset(size.width, dividerY), divider);
+
+    // Calculate dot position based on the visible line path
+    PathMetrics visibleMetrics = visibleLinePath.computeMetrics();
+    PathMetrics invisibleMetrics1 = invisibleLinePath1.computeMetrics();
+    PathMetrics invisibleMetrics2 = invisibleLinePath2.computeMetrics();
+    PathMetric visibleMetric = visibleMetrics.elementAt(0);
+    PathMetric invisibleMetric1 = invisibleMetrics1.elementAt(0);
+    PathMetric invisibleMetric2 = invisibleMetrics2.elementAt(0);
+    Tangent tangent;
+
+    if (dotPosition < 0.2) {
+      tangent = invisibleMetric1
+          .getTangentForOffset(invisibleMetric1.length * dotPosition / 0.2)!;
+    } else if (dotPosition > 0.8) {
+      tangent = invisibleMetric2.getTangentForOffset(invisibleMetric2.length -
+          (invisibleMetric2.length * (dotPosition - 0.8) / 0.2))!;
+    } else {
+      tangent = visibleMetric.getTangentForOffset(
+          visibleMetric.length * ((dotPosition - 0.2) / 0.6))!;
+    }
+
+    Paint glowPaint = Paint()
+      ..shader = RadialGradient(
+        colors: [Colors.white.withOpacity(0.7), Colors.transparent],
+      ).createShader(Rect.fromCircle(
+        center: dotPosition < 0.8
+            ? visibleMetric
+                .getTangentForOffset(
+                    visibleMetric.length * ((dotPosition - 0.2) / 0.6))!
+                .position
+            : invisibleMetric2
+                .getTangentForOffset(invisibleMetric2.length -
+                    (invisibleMetric2.length * (dotPosition - 0.8) / 0.2))!
+                .position,
+        radius: 14.0,
+      ));
+
+    // Draw the visible lines
+    canvas.drawPath(visibleLinePath, visibleLinePaint);
+
+    // Draw the light emitting effect
+    canvas.drawCircle(tangent.position, 15.0, glowPaint);
+
+    // Draw the dot
+    canvas.drawCircle(tangent.position, 4.0, dotPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
 
 // Container(
 //   alignment: Alignment.bottomCenter,
